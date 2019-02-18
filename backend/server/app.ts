@@ -2,6 +2,9 @@ import * as dotenv from "dotenv";
 import * as express from "express";
 import * as path from "path";
 
+// Put dotenv in use before importing controllers
+dotenv.config();
+
 // Import controllers
 import booksController from "./books/books.controller";
 

@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import Book from "./books.model";
@@ -24,6 +25,20 @@ router.route("/:id").delete(async (request, response) => {
         const bookId = request.params.id;
         await Book.findOneAndRemove({_id: bookId});
         return response.status(202).json("Book deleted!");
+    } catch (error) {
+        return response.status(404).send(error);
+    }
+});
+
+router.route("/search/:title").get(async (request, response) => {
+    try {
+        const title = request.params.title;
+        const apiKey = process.env.GOOGLE_API;
+        const res = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=+intitle:${title}&key=${apiKey}`);
+
+        if (res.data.totalItems === 0) { throw "No items found" }
+
+        return response.status(200).json(res.data);
     } catch (error) {
         return response.status(404).send(error);
     }

@@ -94,4 +94,19 @@ describe("/api/items tests", () => {
 
         expect(response.status).toBe(404);
     });    
+
+    it("should get >10 books", async () => {
+        const response = await request(app)
+            .get("/api/books/search/count+of+monte+cristo")
+
+        expect(response.status).toBe(200);
+        expect(response.body.totalItems).toBeGreaterThan(10);
+    });
+
+    it("should return no books", async () => {
+        const response = await request(app)
+            .get("/api/books/search/asdfasdfasdfasdfasdfasdfasdf")
+
+        expect(response.status).toBe(404);
+    });
 });
