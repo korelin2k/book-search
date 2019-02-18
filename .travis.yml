@@ -5,7 +5,5 @@ node_js:
   - 8
 services:
   - mongodb
-env:
-  - GOOGLE_API=GOOGLE_API
 script:
 - npm test
