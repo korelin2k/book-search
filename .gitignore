@@ -1,9 +1,11 @@
 # Common
+.env
 node_modules
 package-lock.json
 yarn.lock
 
 # Backend
+backend/.env
 backend/build
 backend/coverage
 backend/node_modules
@@ -11,6 +13,7 @@ backend/package-lock.json
 backend/yarn.lock
 
 # Frontend
+frontend/.env
 frontend/build
 frontend/coverage
 frontend/node_modules
