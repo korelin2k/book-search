@@ -5,22 +5,18 @@ import app from "../app";
 import Book from "./books.model";
 
 describe("/api/items tests", () => {
-
     const mongod = new MongodbMemoryServer();
 
-    // Connect to mongoose mock, create a test user and get the access token
     beforeAll(async () => {
         const uri = await mongod.getConnectionString();
         await mongoose.connect(uri, { useNewUrlParser: true });
     });
 
-    // Remove test user, disconnect and stop database
     afterAll(async () => {
         await mongoose.disconnect();
         await mongod.stop();
     });
 
-    // Remove sample items
     afterEach(async () => {
         await Book.remove({});
     });
@@ -38,6 +34,7 @@ describe("/api/items tests", () => {
         await newBook.save();
     })
 
+    // Unit Test
     it("should get all books", async () => {
         const response = await request(app)
             .get("/api/books/")
@@ -46,6 +43,7 @@ describe("/api/items tests", () => {
         expect(response.body).toEqual([expect.objectContaining({"authors": ["Suzanne Collins"], "title": "The Hunger Games"})])
     });
 
+    // Unit Test
     it("should post a new book", async () => {
         const newBook = {
             "authors": ["Alexandre Dumas"],
@@ -63,6 +61,7 @@ describe("/api/items tests", () => {
         expect(response.body).toBe("Book saved!")
     });
 
+    // Unit Test
     it("should toss an error trying to add a new book", async () => {
         const newBook = {
             "authors": ["Alexandre Dumas"],
@@ -78,6 +77,7 @@ describe("/api/items tests", () => {
         expect(response.status).toBe(400);
     });
 
+    // Unit Test
     it("should delete a book", async () => {
         const bookInfo = await Book.findOne({title: "The Hunger Games"})
         
@@ -88,6 +88,7 @@ describe("/api/items tests", () => {
         expect(response.body).toBe("Book deleted!");
     });
 
+    // Unit Test
     it("should toss an error trying to delete a book", async () => {
         const response = await request(app)
             .delete("/api/books/43234234324234");
@@ -95,6 +96,7 @@ describe("/api/items tests", () => {
         expect(response.status).toBe(404);
     });    
 
+    // Integration Test
     it("should get >10 books", async () => {
         const response = await request(app)
             .get("/api/books/search/count+of+monte+cristo")
@@ -103,6 +105,7 @@ describe("/api/items tests", () => {
         expect(response.body.totalItems).toBeGreaterThan(10);
     });
 
+    // Integration Test
     it("should return no books", async () => {
         const response = await request(app)
             .get("/api/books/search/asdfasdfasdfasdfasdfasdfasdf")
