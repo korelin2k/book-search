@@ -1,35 +1,35 @@
 {
-  "name": "react-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "proxy": "http://localhost:9000",
-  "author": "Chris Figgins",
-  "license": "ISC",
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
-      "!src/**/*.d.ts",
-      "!src/index.tsx",
-      "!src/registerServiceWorker.ts"
-    ]
-  },
-  "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "postinstall": "yarn build"
-  },
-  "dependencies": {
-    "axios": "^0.18.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts-ts": "2.16.0"
-  },
-  "devDependencies": {
-    "@types/app-shared-types": "link:../types",
-    "@types/node": "^10.5.2",
-    "@types/react": "^16.4.6",
-    "@types/react-dom": "^16.0.6",
-    "axios-mock-adapter": "^1.15.0",
-    "typescript": "^2.9.2"
+    "name": "react-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "proxy": "http://localhost:9000",
+    "author": "Chris Figgins",
+    "license": "ISC",
+    "jest": {
+      "collectCoverageFrom": [
+        "src/**/*.{ts,tsx}",
+        "!src/**/*.d.ts",
+        "!src/index.tsx",
+        "!src/registerServiceWorker.ts"
+      ]
+    },
+    "scripts": {
+      "start": "react-scripts-ts start",
+      "build": "react-scripts-ts build",
+      "postinstall": "yarn build"
+    },
+    "dependencies": {
+      "axios": "^0.18.0",
+      "react": "^16.8.2",
+      "react-dom": "^16.8.2",
+      "react-scripts-ts": "^3.1.0"
+    },
+    "devDependencies": {
+      "@types/app-shared-types": "link:../types",
+      "@types/node": "^11.9.4",
+      "@types/react": "^16.8.3",
+      "@types/react-dom": "^16.8.2",
+      "axios-mock-adapter": "^1.16.0",
+      "typescript": "^3.3.3"
+    }
   }
-}

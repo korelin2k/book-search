@@ -5,7 +5,7 @@
   "author": "Chris Figgins",
   "license": "ISC",
   "engines": {
-    "node": "8.x",
+    "node": "11.x",
     "yarn": "1.x"
   },
   "scripts": {
@@ -23,6 +23,6 @@
     "serve": "cd backend && node build/server.js"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^4.1.0"
   }
 }
