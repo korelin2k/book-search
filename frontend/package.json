@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:9000",
+  "author": "Chris Figgins",
+  "license": "ISC",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
@@ -24,7 +26,6 @@
   },
   "devDependencies": {
     "@types/app-shared-types": "link:../types",
-    "@types/axios": "^0.14.0",
     "@types/node": "^10.5.2",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",

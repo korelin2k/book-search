@@ -2,6 +2,8 @@
   "name": "create-mern-ts-app",
   "version": "1.0.0",
   "private": true,
+  "author": "Chris Figgins",
+  "license": "ISC",
   "engines": {
     "node": "8.x",
     "yarn": "1.x"

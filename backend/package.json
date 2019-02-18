@@ -2,6 +2,8 @@
   "name": "express-backend",
   "version": "0.1.0",
   "main": "./build/server.js",
+  "author": "Chris Figgins",
+  "license": "ISC",
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "postinstall": "yarn build",
