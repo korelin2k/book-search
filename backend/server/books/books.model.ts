@@ -19,11 +19,13 @@ const bookSchemaDef: SchemaDef<App.Book> = {
   },  
   link: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }, 
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
 };
 

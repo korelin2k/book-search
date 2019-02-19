@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -40,19 +41,26 @@ const styles = (theme: Theme) =>
         gridListTile: {
             width: 350,
             height: 450,
-        }
+        },
+        close: {
+            padding: theme.spacing.unit / 2,
+        },
     });
 
 export interface Props extends WithStyles<typeof styles> { }
 
 interface State {
     books: string[];
+    open: boolean;
+    error: boolean;
 }
 
 class Search extends React.Component<Props, State> {
     // Initialize this.state.books as an empty array
     public state = {
         books: [],
+        open: false,
+        error: false,
     };
 
     // Add code here to get all books from the database and save them to this.state.books
@@ -69,6 +77,22 @@ class Search extends React.Component<Props, State> {
     public componentDidMount() {
         this.searchBooks();
     }
+
+    public handleClose = (event: any, reason: any) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ open: false });
+    };
+
+    public handleError = (event: any, reason: any) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ error: false });
+    };
 
     public render() {
         const { classes } = this.props;
@@ -98,15 +122,19 @@ class Search extends React.Component<Props, State> {
                                     <Button size="small" color="primary" onClick={() => window.open(book.volumeInfo.infoLink, "_blank")}>
                                         View
                                     </Button>
-                                    <Button size="small" color="primary" onClick={() =>
-                                        API.saveBook({ 
+                                    <Button size="small" color="primary" onClick={() => {
+                                        API.saveBook({
                                             authors: book.volumeInfo.authors,
                                             description: book.volumeInfo.description,
                                             image: book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https"),
                                             link: book.volumeInfo.infoLink,
                                             title: book.volumeInfo.title,
+                                        }).then(result => {
+                                            this.setState({ open: true });
+                                        }).catch(error => {
+                                            this.setState({ error: true });
                                         })
-                                    }>
+                                    }}>
                                         Save
                                     </Button>
                                 </CardActions>
@@ -114,6 +142,32 @@ class Search extends React.Component<Props, State> {
                         </GridListTile>
                     ))}
                 </GridList>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.open}
+                    autoHideDuration={6000}
+                    onClose={this.handleClose}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">Book Saved</span>}
+                />
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.error}
+                    autoHideDuration={6000}
+                    onClose={this.handleError}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">Book Previously Saved</span>}
+                />
             </Grid>
         );
     }
