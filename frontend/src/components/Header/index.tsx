@@ -135,7 +135,9 @@ class PrimarySearchAppBar extends React.Component<Props, State> {
                     <Toolbar>
                         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                             Google Books |
-                            <Link component={mySaved} />
+                            <Link component={mySaved}>
+                                Saved
+                            </Link>
                         </Typography>
                         <div className={classes.search}>
                             <form onSubmit={this.handleSubmit}>
