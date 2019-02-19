@@ -8,7 +8,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Link from '@material-ui/core/Link';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from "react-router-dom";
+import { Redirect, Link as RouterLink } from "react-router-dom";
 import SearchIcon from '@material-ui/icons/Search';
 
 const styles = (theme: Theme) =>
@@ -75,9 +75,6 @@ const styles = (theme: Theme) =>
             paddingLeft: theme.spacing.unit * 10,
             transition: theme.transitions.create('width'),
             width: '100%',
-            [theme.breakpoints.up('md')]: {
-                width: 200,
-            },
         },
     });
 
@@ -86,46 +83,78 @@ export interface Props extends WithStyles<typeof styles> { }
 interface State {
     anchorEl: null | HTMLElement;
     mobileMoreAnchorEl: null | HTMLElement;
+    fireRedirect: boolean | HTMLElement;
+    searchString: string | HTMLElement;
+    fullSearchString: string | HTMLElement;
 }
 
 class PrimarySearchAppBar extends React.Component<Props, State> {
     public state: State = {
         anchorEl: null,
         mobileMoreAnchorEl: null,
+        fireRedirect: false,
+        searchString: "",
+        fullSearchString: "",
     };
 
-    public handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        this.setState({ anchorEl: event.currentTarget });
-    };
+    public handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        this.setState({ fireRedirect: true });
+        this.setState({ fullSearchString: this.state.searchString});
+        this.setState({ searchString: ""});
+    }
 
-    public handleMenuClose = () => {
-        this.setState({ anchorEl: null });
-    };
+    public handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        this.setState({ searchString: value });
+    }
+
+    public handleRedirect = () => {
+        const searchString = this.state.fullSearchString.toString().replace(/ /g,"+");
+
+        if (this.state.fireRedirect && (window.location.pathname !== `/search/${searchString}`)) {         
+            return <Redirect to={`/search/${searchString}`} />;
+        } else {
+            return "";
+        }
+    }
+
+    public resetAllState = () => {
+        this.setState({ fireRedirect: false });
+        this.setState({ searchString: "" });
+    }
 
     public render() {
         const { classes } = this.props;
 
-        const mySaved = () => <RouterLink to="/saved" className={classes.saved}>Saved</RouterLink>;
+        const mySaved = () => <RouterLink to="/saved" className={classes.saved} onClick={this.resetAllState}>Saved</RouterLink>;
 
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.appbar}>
                     <Toolbar>
                         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                            Google Books | 
+                            Google Books |
                             <Link component={mySaved} />
                         </Typography>
                         <div className={classes.search}>
-                            <div className={classes.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                                placeholder="Search for new books…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                            />
+                            <form onSubmit={this.handleSubmit}>
+                                <div className={classes.searchIcon}>
+                                    <SearchIcon />
+                                </div>
+                                <InputBase
+                                    placeholder="Search for new books…"
+                                    classes={{
+                                        root: classes.inputRoot,
+                                        input: classes.inputInput,
+                                    }}
+                                    value={this.state.searchString}
+                                    name="searchString"
+                                    fullWidth={true}
+                                    onChange={this.handleInputChange}
+                                />
+                            </form>
+                            {this.handleRedirect()}
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -136,7 +165,7 @@ class PrimarySearchAppBar extends React.Component<Props, State> {
                     <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
                         Search for and Save Books of Interest
                     </Typography>
-                </Grid>                
+                </Grid>
             </div>
         );
     }

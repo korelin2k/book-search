@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Footer from "./components/Footer";
@@ -14,9 +14,11 @@ function App() {
             <Router>
                 <div>
                     <Header />
-                    <Route exact path="/" component={Saved} />
-                    <Route path="/saved" component={Saved} />
-                    <Route path="/search" component={Search} />
+                    <Switch>
+                        <Route exact path="/" component={Saved} />
+                        <Route path="/saved" component={Saved} />
+                        <Route path="/search" component={Search} />
+                    </Switch>
                     <Footer />
                 </div>
             </Router>
