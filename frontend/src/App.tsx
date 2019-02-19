@@ -1,105 +1,27 @@
-import axios from "axios";
-import * as React from 'react';
-import './App.css';
-import * as session from './session';
-import logo from './logo.svg';
+import * as React from "react";
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import Saved from "./components/Saved";
+import Search from "./components/Search";
 
-export interface AppState {
-  email: string;
-  password: string;
-  isRequesting: boolean;
-  isLoggedIn: boolean;
-  data: App.Book[];
-  error: string;
-}
-
-class App extends React.Component<{}, AppState> {
-  public state = {
-    email: "",
-    password: "",
-    isRequesting: false,
-    isLoggedIn: false,
-    data: [],
-    error: ""
-  };
-
-  public componentDidMount() {
-    this.setState({ isLoggedIn: session.isSessionValid() });
-  }
-
-  public render() {
+function App() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <div className="App-error">{this.state.error}</div>
-        {this.state.isLoggedIn ? (
-          <div className="App-private">
-            <div>
-              Server test data:
-              <ul>
-                {this.state.data.map((item: App.Book, index) => <li key={index}>name: {item.title} / value: {item.description}</li>)}
-              </ul>
-            </div>
-            <button disabled={this.state.isRequesting} onClick={this.getTestData}>Get test data</button>
-            <button disabled={this.state.isRequesting} onClick={this.logout}>Log out</button>
-          </div>
-        ) : (
-          <div className="App-login">
-            (try the credentials: testuser@email.com / my-password)
-            <input
-              disabled={this.state.isRequesting}
-              placeholder="email"
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ email: e.target.value })}
-            />
-            <input
-              disabled={this.state.isRequesting}
-              placeholder="password"
-              type="password"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ password: e.target.value })}
-            />
-            <button disabled={this.state.isRequesting} onClick={this.handleLogin}>Log in</button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  private handleLogin = async (): Promise<void> => {
-    const { email, password } = this.state;
-    try {
-      this.setState({ error: "" });
-      this.setState({ isRequesting: true });
-      const response = await axios.post<{ token: string; expiry: string }>("/api/users/login", { email, password });
-      const { token, expiry } = response.data;
-      session.setSession(token, expiry);
-      this.setState({ isLoggedIn: true });
-    } catch (error) {
-      this.setState({ error: "Something went wrong" });
-    } finally {
-      this.setState({ isRequesting: false });
-    }
-  };
-
-  private logout = (): void => {
-    session.clearSession();
-    this.setState({ isLoggedIn: false });
-  };
-
-  private getTestData = async (): Promise<void> => {
-    try {
-      this.setState({ error: "" });
-      const response = await axios.get<App.Book[]>("/api/items", { headers: session.getAuthHeaders() });
-      this.setState({ data: response.data });
-    } catch (error) {
-      this.setState({ error: "Something went wrong" });
-    } finally {
-      this.setState({ isRequesting: false });
-    }
-  }
+        <React.Fragment>
+            <CssBaseline />
+            <Router>
+                <div>
+                    <Header />
+                    <Route exact path="/" component={Saved} />
+                    <Route path="/saved" component={Saved} />
+                    <Route path="/search" component={Search} />
+                    <Footer />
+                </div>
+            </Router>
+        </React.Fragment>
+    )
 }
 
 export default App;
