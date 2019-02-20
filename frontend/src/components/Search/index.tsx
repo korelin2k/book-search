@@ -53,6 +53,7 @@ interface State {
     books: string[];
     open: boolean;
     error: boolean;
+    currentSearch: string;
 }
 
 class Search extends React.Component<Props, State> {
@@ -61,22 +62,29 @@ class Search extends React.Component<Props, State> {
         books: [],
         open: false,
         error: false,
+        currentSearch: ""
     };
 
     // Add code here to get all books from the database and save them to this.state.books
 
     public searchBooks() {
-        const searchString = window.location.pathname.substr(window.location.pathname.lastIndexOf("/") + 1);
-        console.log(searchString);
-        API.searchBooks(searchString).then(result => {
+        API.searchBooks(this.state.currentSearch).then(result => {
             this.setState({ books: result.data.items });
             console.log(this.state.books);
         })
     }
 
-    public componentDidMount() {
+    public async componentDidMount() {
+        const searchString = window.location.pathname.substr(window.location.pathname.lastIndexOf("/") + 1);
+        await this.setState({ currentSearch: searchString });
         this.searchBooks();
     }
+
+    public async componentWillReceiveProps(){
+        const searchString = window.location.pathname.substr(window.location.pathname.lastIndexOf("/") + 1);
+        await this.setState({ currentSearch: searchString });
+        this.searchBooks();
+     }
 
     public handleClose = (event: any, reason: any) => {
         if (reason === 'clickaway') {
@@ -106,7 +114,7 @@ class Search extends React.Component<Props, State> {
                                 <CardActionArea className={classes.cardAction}>
                                     <CardMedia
                                         className={classes.media}
-                                        image={typeof book.volumeInfo.imageLinks !== "undefined" ? (book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https")) : ("../images/generic-book.jpg")}
+                                        image={typeof book.volumeInfo.imageLinks !== "undefined" ? book.volumeInfo.imageLinks.thumbnail : ("../images/generic-book.jpg")}
                                         title={book.volumeInfo.title}
                                     />
                                     <CardContent>
@@ -127,8 +135,6 @@ class Search extends React.Component<Props, State> {
                                             book.volumeInfo.imageLinks = {
                                                 thumbnail: "../images/generic-book.jpg",
                                             }
-                                        } else {
-                                            book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https");
                                         }
 
                                         API.saveBook({
