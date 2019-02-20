@@ -116,7 +116,7 @@ class Saved extends React.Component<Props, State> {
                                         title={book.title}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <Typography gutterBottom variant="h6" component="h6">
                                             {book.title} by {book.authors}
                                         </Typography>
                                         <Typography component="p">
