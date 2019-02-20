@@ -119,7 +119,7 @@ class Search extends React.Component<Props, State> {
                                     />
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="h6">
-                                            {book.volumeInfo.title} by {book.volumeInfo.authors}
+                                            {book.volumeInfo.title} by {typeof book.volumeInfo.authors !== "undefined" ? book.volumeInfo.authors[0] : ("\"Secret\"")}
                                         </Typography>
                                         <Typography component="p">
                                             {typeof book.volumeInfo.description !== "undefined" && book.volumeInfo.description.substring(0, 100)}
@@ -137,8 +137,12 @@ class Search extends React.Component<Props, State> {
                                             }
                                         }
 
+                                        if (typeof book.volumeInfo.authors === "undefined") {
+                                            book.volumeInfo.authors = ["\"Secret\""];
+                                        }
+
                                         API.saveBook({
-                                            authors: book.volumeInfo.authors,
+                                            authors: book.volumeInfo.authors[0],
                                             description: book.volumeInfo.description,
                                             image: book.volumeInfo.imageLinks.thumbnail,
                                             link: book.volumeInfo.infoLink,

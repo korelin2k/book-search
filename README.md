@@ -14,3 +14,6 @@ https://book-search-cf.herokuapp.com/saved
 - Testing with Jest & MongoDB Memory "Server" for the backend
 - Travis CI integration
 - Coveralls integration for overall code coverage
+
+### Lessons Learned (for next time)
+- Need to move the majority of the validation and conditional logic outside of the jsx.
