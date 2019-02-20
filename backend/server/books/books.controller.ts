@@ -16,6 +16,7 @@ router.route("/").post(bodyParser.json(), async (request, response) => {
         await book.save();
         return response.status(201).json("Book saved!");
     } catch (error) {
+        console.log(error);
         return response.status(400).send(error);
     }
 });

@@ -106,7 +106,7 @@ class Search extends React.Component<Props, State> {
                                 <CardActionArea className={classes.cardAction}>
                                     <CardMedia
                                         className={classes.media}
-                                        image={book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https")}
+                                        image={typeof book.volumeInfo.imageLinks !== "undefined" ? (book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https")) : ("../images/generic-book.jpg")}
                                         title={book.volumeInfo.title}
                                     />
                                     <CardContent>
@@ -123,10 +123,18 @@ class Search extends React.Component<Props, State> {
                                         View
                                     </Button>
                                     <Button size="small" color="primary" onClick={() => {
+                                        if (typeof book.volumeInfo.imageLinks === "undefined") {
+                                            book.volumeInfo.imageLinks = {
+                                                thumbnail: "../images/generic-book.jpg",
+                                            }
+                                        } else {
+                                            book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https");
+                                        }
+
                                         API.saveBook({
                                             authors: book.volumeInfo.authors,
                                             description: book.volumeInfo.description,
-                                            image: book.volumeInfo.imageLinks.thumbnail.replace(/http/, "https"),
+                                            image: book.volumeInfo.imageLinks.thumbnail,
                                             link: book.volumeInfo.infoLink,
                                             title: book.volumeInfo.title,
                                         }).then(result => {

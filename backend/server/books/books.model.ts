@@ -6,16 +6,13 @@ interface BookDoc extends App.Book, Document {}
 
 const bookSchemaDef: SchemaDef<App.Book> = {
   authors: {
-    type: [String],
-    required: true
+    type: [String]
   },
   description: {
-    type: String,
-    required: true
+    type: String
   },
   image: {
-    type: String,
-    required: true
+    type: String
   },  
   link: {
     type: String,
